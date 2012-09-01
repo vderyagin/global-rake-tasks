@@ -3,7 +3,7 @@ FEH_BG = File.expand_path '~/.fehbg'
 
 # Return random wallpaper from WALLPAPERS_DIRECTORY.
 def get_random_wallpaper
-  Dir["#{WALLPAPERS_DIRECTORY}/*"].sample
+  Dir[File.join WALLPAPERS_DIRECTORY, '*'].sample
 end
 
 # Try to find wallpaper, last set by feh(1) as background, if failed - return
@@ -19,22 +19,13 @@ end
 
 desc 'Lock current display using alock(1).'
 task :lock_screen do
-  command = []
-  command << 'alock'
-  command << '-auth' << 'pam'
-  command << '-bg' << "image:file=#{try_get_active_wallpaper}"
-
-  IO.popen command
+  wallpaper = try_get_active_wallpaper
+  IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wallpaper}"]
 end
 
 namespace :wp do
   def set_wallpaper(wallpaper)
-    command = []
-    command << 'feh'
-    command << '--bg-scale'
-    command << wallpaper
-
-    IO.popen command
+    IO.popen ['feh', '--bg-scale', wallpaper]
   end
 
   desc 'Randomly rename all wallpapers.'

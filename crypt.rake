@@ -26,11 +26,7 @@ namespace :crypt do
 
   def check_if_already_mounted
     if mounted?
-      command = []
-      command << 'notify-send'
-      command << 'Filesystem is already mounted'
-
-      IO.popen command
+      IO.popen ['notify-send', 'Filesystem is already mounted']
     end
   end
 
@@ -71,14 +67,8 @@ namespace :crypt do
       exit
     end
 
-    command = []
-    command << 'fusermount'
-    command << '-uz'
-    command << MOUNT_DIR
-
     if File.directory? MOUNT_DIR
-      system 'sync'
-      IO.popen(command).close
+      IO.popen(['fusermount', '-uz', MOUNT_DIR]).close
     end
 
     cleanup
