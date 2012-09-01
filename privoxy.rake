@@ -18,12 +18,12 @@ namespace :privoxy do
     end
   end
 
-  desc 'Enable privoxy'
+  desc 'Enable privoxy.'
   task :enable do
     privoxy :enable
   end
 
-  desc 'Disable privoxy'
+  desc 'Disable privoxy.'
   task :disable do
     privoxy :disable
   end

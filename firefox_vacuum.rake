@@ -1,4 +1,4 @@
-desc 'VACUUM all the sqlite database files used by firefox'
+desc 'VACUUM all the sqlite database files used by firefox and thunderbird.'
 task :firefox_vacuum do
   wildcards = [
     '~/.mozilla/firefox/**/*.sqlite',

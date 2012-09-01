@@ -37,7 +37,7 @@ namespace :wp do
     IO.popen command
   end
 
-  desc 'Randomly rename all wallpapers'
+  desc 'Randomly rename all wallpapers.'
   task :rename do
     require 'pathname'
     require 'securerandom'
