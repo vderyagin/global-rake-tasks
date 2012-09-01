@@ -1,7 +1,7 @@
 ENCRYPTED_DIR = File.expand_path '~/misc/crypt'
 MOUNT_DIR = File.expand_path '~/temp/encrypted'
 MTAB = '/etc/mtab'
-FAIL_ICON = File.expand_path '../images/fail.png', __FILE__
+FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
 namespace :crypt do
   def mount_failed
