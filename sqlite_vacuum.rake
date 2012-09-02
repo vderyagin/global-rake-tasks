@@ -7,8 +7,8 @@ task :sqlite_vacuum do
 
   wildcards.each do |wildcard|
     Dir.glob wildcard do |db|
+      puts "vacuuming #{db}"
       IO.popen ['sqlite3', db], 'w' do |process|
-        puts "vacuuming #{db}"
         process.write 'VACUUM;'
         process.close_write
       end
