@@ -1,3 +1,5 @@
+ENV['DISPLAY'] ||= ':0'
+
 WALLPAPERS_DIRECTORY = File.expand_path '~/.wallpapers'
 FEH_BG = File.expand_path '~/.fehbg'
 
