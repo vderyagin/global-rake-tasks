@@ -51,7 +51,7 @@ namespace :crypt do
     command << "--idle=#{timeout}"
     command << '--ondemand'
 
-    IO.popen(command).close
+    system *command
 
     if $? == 0
       puts 'filesystem mounted successfully.'
@@ -68,7 +68,7 @@ namespace :crypt do
     end
 
     if File.directory? MOUNT_DIR
-      IO.popen(['fusermount', '-uz', MOUNT_DIR]).close
+      system 'fusermount', '-uz', MOUNT_DIR
     end
 
     cleanup
