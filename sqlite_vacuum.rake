@@ -1,5 +1,5 @@
 desc 'VACUUM all the sqlite database files used by firefox and thunderbird.'
-task :firefox_vacuum do
+task :sqlite_vacuum do
   wildcards = [
     '~/.mozilla/firefox/**/*.sqlite',
     '~/.thunderbird/**/*.sqlite'
