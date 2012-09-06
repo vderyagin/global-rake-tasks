@@ -13,7 +13,7 @@ namespace :crypt do
     command << 'Failed to mount encrypted filesystem'
     command << 'Try again'
     command << '-u' << 'critical'
-    command << "--icon=#{FAIL_ICON}"
+    command << "--icon=#{FAIL_ICON}" if File.exists? FAIL_ICON
 
     IO.popen command
 
