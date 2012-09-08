@@ -8,7 +8,7 @@ namespace :emacs do
     stale = Pathname.glob(File.expand_path '.emacs.d/**/*.el', home).select { |el|
       elc = Pathname.new "#{el}c"
       elc.exist? and elc.mtime < el.mtime
-    }.map { |el| el.relative_path_from home }
+    }.map { |el| "#{el}c" }
 
     puts stale
 
