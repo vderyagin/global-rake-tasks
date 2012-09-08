@@ -3,12 +3,12 @@ namespace :emacs do
   task :find_stale_bytecode do
     require 'pathname'
 
-    HOME = Pathname.new Dir.home
+    home = Pathname.new Dir.home
 
-    stale = Pathname.glob("#{HOME}/.emacs.d/**/*.el").select { |el|
+    stale = Pathname.glob(File.expand_path '.emacs.d/**/*.el', home).select { |el|
       elc = Pathname.new "#{el}c"
       elc.exist? and elc.mtime < el.mtime
-    }.map { |el| el.relative_path_from HOME }
+    }.map { |el| el.relative_path_from home }
 
     puts stale
 
