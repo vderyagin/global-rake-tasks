@@ -1,54 +1,84 @@
 namespace :backup do
-  EMAIL = 'vderyagin@gmail.com'
-  ARCHIVE = File.expand_path '~/encrypted.zip'
-
-  COMMANDS = {
-    'public_key.txt'  => ['gpg', '--export', EMAIL],
-    'private_key.txt' => ['gpg', '--export-secret-key', EMAIL],
-  }
-
-  FILES = [
-    '~/org/google-backup-codes.org.gpg',
-    '~/org/passwd.org.gpg',
-    '~/org/phones.org.gpg',
-    '~/.ssh/id_rsa',
-    '~/.ssh/id_rsa.pub'
-  ].map &(File.method :expand_path)
-
-  def gpg_encrypt_symmetrically(file)
-    system 'gpg', '--symmetric', file
-    rm file
+  def srm(*files)
+    sh 'srm', '-l', *files
   end
 
-  def check_if_file_exists(file)
+  def srm_r(*files)
+    sh 'srm', '-l', '-r', *files
+  end
+
+  def gpg_encrypt_symmetrically(file)
+    system 'gpg', '--symmetric', '--force-mdc', file
+    srm file
+  end
+
+  def exit_if_file_exists(file)
     if File.exists? file
       puts "file #{file} already exists."
       exit 1
     end
   end
 
-  desc 'Make archive of backup files and encrypt it.'
-  task :encrypt do
-    check_if_file_exists ARCHIVE
+  def create_zip_archive(archive, *files)
+    system 'zip', '--junk-paths', archive , *files
+  end
 
-    require 'zip/zip'
+  desc 'Make encrypted backup of gpg keys.'
+  task :gpg_keys do
+    archive_file = 'gpg_keys.zip'
 
-    Zip::ZipFile.open ARCHIVE, Zip::ZipFile::CREATE do |zipfile|
-      zipfile.mkdir 'encrypted'
+    sh 'gpg --export vderyagin@gmail.com > public_key.txt'
+    sh 'gpg --export-secret-key vderyagin@gmail.com > secret_key.txt'
 
-      COMMANDS.each do |name, command|
-        zipfile.get_output_stream File.join('encrypted', name) do |stream|
-          stream.puts IO.popen(command).read
-        end
-      end
+    create_zip_archive archive_file, 'public_key.txt', 'secret_key.txt'
+    gpg_encrypt_symmetrically archive_file
+  end
 
-      FILES.each do |file|
-        zipfile.get_output_stream File.join('encrypted', File.basename(file)) do |stream|
-          stream.puts File.read file
-        end
-      end
+  desc 'Make encrypted backup of gmail data.'
+  task :gmail do
+    imap_backup = File.expand_path '~/vderyagin@gmail.com'
+    cd File.dirname imap_backup
+    archive_file = 'gmail.zip'
+    sh 'offlineimap'
+    system 'zip', '--recurse-paths', archive_file, File.basename(imap_backup)
+    srm_r imap_backup
+    gpg_encrypt_symmetrically archive_file
+  end
+
+  desc 'Make encrypted backup of encrypted org files.'
+  task :org do
+    org_files = Dir[File.expand_path '~/org/**/*.org.gpg']
+    archive_file = 'org.zip'
+
+    create_zip_archive archive_file, *org_files
+    gpg_encrypt_symmetrically archive_file
+  end
+
+  namespace :ssh do
+    def public_keys
+      Dir[File.expand_path '~/.ssh/*.pub']
     end
 
-    gpg_encrypt_symmetrically ARCHIVE
+    def private_keys
+      public_keys
+        .map    { |pub| pub.chomp '.pub' }
+        .select { |key| File.exists? key }
+    end
+
+    desc 'Make encrypted backup of public SSH keys.'
+    task :public do
+      archive_file = 'public_ssh_keys.zip'
+      create_zip_archive archive_file, *public_keys
+      gpg_encrypt_symmetrically archive_file
+    end
+
+    desc 'Make encrypted backup of all SSH keys.'
+    task :all do
+      archive_file = 'all_ssh_keys.zip'
+      create_zip_archive archive_file, *(public_keys | private_keys)
+      gpg_encrypt_symmetrically archive_file
+    end
   end
+
+  task :ssh => 'ssh:all'
 end
