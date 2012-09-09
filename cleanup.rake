@@ -15,6 +15,7 @@ task :cleanup do
     '.thumbnails',
     '.url',
     '.zcompdump',
+    '.zprofile',
     '.zshenv'
   ].map { |file| File.expand_path file, '~' }
 
