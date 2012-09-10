@@ -4,8 +4,6 @@ task :cleanup do
 
   list = [
     '.adobe',
-    '.bash_profile',
-    '.bashrc',
     '.bzr.log',
     '.ccache',
     '.dvdcss',
@@ -13,10 +11,7 @@ task :cleanup do
     '.rbx',
     '.serverauth.*',
     '.thumbnails',
-    '.url',
-    '.zcompdump',
-    '.zprofile',
-    '.zshenv'
+    '.url'
   ].map { |file| File.expand_path file, '~' }
 
   clean.include(list).existing!
