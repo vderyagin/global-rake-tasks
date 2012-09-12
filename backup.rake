@@ -31,6 +31,7 @@ namespace :backup do
     sh 'gpg --export-secret-key vderyagin@gmail.com > secret_key.txt'
 
     create_zip_archive archive_file, 'public_key.txt', 'secret_key.txt'
+    srm 'public_key.txt', 'secret_key.txt'
     gpg_encrypt_symmetrically archive_file
   end
 
