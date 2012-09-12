@@ -1,9 +1,19 @@
+=begin
+
+Set of rake tasks for mounting/unmounting and querying status of certain encfs
+(http://www.arg0.net/encfs) filesystem (specified by ENCRYPTED_DIR and
+MOUNT_DIR constants).
+
+Relies on presence of encfs(1) and notify-send(1) command-line tools.
+
+=end
+
 ENCRYPTED_DIR = File.expand_path '~/misc/crypt'
 MOUNT_DIR = File.expand_path '~/temp/encrypted'
 MTAB = '/etc/mtab'
 FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
-namespace :crypt do
+namespace :encfs do
   def mount_failed
 
     puts 'failed to mount encrypted filesystem.'
@@ -15,7 +25,7 @@ namespace :crypt do
     command << '-u' << 'critical'
     command << "--icon=#{FAIL_ICON}" if File.exists? FAIL_ICON
 
-    IO.popen command
+    sh *command
 
     cleanup
   end
@@ -24,19 +34,13 @@ namespace :crypt do
     File.readlines(MTAB).any? { |line| line.include? MOUNT_DIR }
   end
 
-  def check_if_already_mounted
-    if mounted?
-      IO.popen ['notify-send', 'Filesystem is already mounted']
-    end
-  end
-
   def cleanup
     rmdir MOUNT_DIR if File.exists? MOUNT_DIR
   end
 
   desc 'Mount encrypted directory.'
   task :mount do
-    check_if_already_mounted
+    sh 'notify-send', 'Filesystem is already mounted' if mounted?
 
     extpass_string = "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_DIR}:'"
     timeout = 60                          # minutes
@@ -80,3 +84,5 @@ namespace :crypt do
     puts mounted? ? " is \e[1m\e[32mMOUNTED\e[0m" : " is \e[1m\e[31mNOT MOUNTED\e[0m"
   end
 end
+
+task :encfs => 'encfs:mount'
