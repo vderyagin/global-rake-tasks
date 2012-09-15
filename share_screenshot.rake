@@ -17,7 +17,7 @@ def put_in_clipboard(text)
 end
 
 def take_screenshot
-  system 'scrot', screenshot_name
+  sh 'scrot', screenshot_name
 end
 
 desc 'Take screenshot, share it on dropbox.com and put link to it in clipboard.'

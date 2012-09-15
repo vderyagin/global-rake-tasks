@@ -8,7 +8,7 @@ namespace :backup do
   end
 
   def gpg_encrypt_symmetrically(file)
-    system 'gpg', '--symmetric', '--force-mdc', file
+    sh 'gpg', '--symmetric', '--force-mdc', file
     srm file
   end
 
@@ -20,7 +20,7 @@ namespace :backup do
   end
 
   def create_zip_archive(archive, *files)
-    system 'zip', '--junk-paths', archive , *files
+    sh 'zip', '--junk-paths', archive , *files
   end
 
   desc 'Make encrypted backup of gpg keys.'
@@ -41,7 +41,7 @@ namespace :backup do
     cd File.dirname imap_backup
     archive_file = 'gmail.zip'
     sh 'offlineimap'
-    system 'zip', '--recurse-paths', archive_file, File.basename(imap_backup)
+    sh 'zip', '--recurse-paths', archive_file, File.basename(imap_backup)
     srm_r imap_backup
     gpg_encrypt_symmetrically archive_file
   end
