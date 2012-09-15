@@ -71,8 +71,8 @@ namespace :encfs do
       exit
     end
 
-    if File.directory? MOUNT_DIR
-      system 'fusermount', '-uz', MOUNT_DIR
+    sh 'sudo', 'fusermount', '-uz', MOUNT_DIR do |ok, res|
+      abort 'failed to unmount' unless ok
     end
 
     cleanup
