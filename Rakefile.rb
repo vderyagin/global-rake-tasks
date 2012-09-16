@@ -1,6 +1,7 @@
 desc 'Generate Readme.md'
 file 'Readme.md' => 'Rakefile.rb' do
   require 'erb'
+
   readme = <<EOL
 # List of tasks: #
 

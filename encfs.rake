@@ -4,7 +4,8 @@ Set of rake tasks for mounting/unmounting and querying status of certain encfs
 (http://www.arg0.net/encfs) filesystem (specified by ENCRYPTED_DIR and
 MOUNT_DIR constants).
 
-Relies on presence of encfs(1) and notify-send(1) command-line tools.
+Relies on presence of encfs(1), fusermount(1) and notify-send(1) command-line
+tools.
 
 =end
 
