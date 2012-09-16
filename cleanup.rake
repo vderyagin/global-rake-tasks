@@ -3,15 +3,13 @@ task :cleanup do
   clean = Rake::FileList.new
 
   list = [
-    '.adobe',
-    '.bzr.log',
-    '.ccache',
-    '.dvdcss',
-    '.macromedia',
+    '.emacs.d/image-dired/*',
+    '.emacs.d/semanticdb/*.cache',
+    '.emacs.d/url',
     '.rbx',
     '.serverauth.*',
     '.thumbnails',
-    '.url'
+    '.url',
   ].map { |file| File.expand_path file, '~' }
 
   clean.include(list).existing!
