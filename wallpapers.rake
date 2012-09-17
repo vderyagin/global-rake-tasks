@@ -22,12 +22,16 @@ end
 desc 'Lock current display using alock(1).'
 task :lock_screen do
   wallpaper = try_get_active_wallpaper
-  IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wallpaper}"]
+  IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wallpaper}"] do
+    sleep 0.1
+  end
 end
 
 namespace :wp do
   def set_wallpaper(wallpaper)
-    IO.popen ['feh', '--bg-scale', wallpaper]
+    IO.popen ['feh', '--bg-scale', wallpaper] do
+      sleep 0.1
+    end
   end
 
   desc 'Randomly rename all wallpapers.'
