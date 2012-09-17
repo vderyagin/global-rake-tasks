@@ -5,18 +5,22 @@ FEH_BG = File.expand_path '~/.fehbg'
 
 # Return random wallpaper from WALLPAPERS_DIRECTORY.
 def get_random_wallpaper
-  Dir[File.join WALLPAPERS_DIRECTORY, '*'].sample
+  active = get_active_wallpaper
+
+  loop {
+    random = Dir[File.join WALLPAPERS_DIRECTORY, '*'].sample
+    break random if active != random
+  }
 end
 
-# Try to find wallpaper, last set by feh(1) as background, if failed - return
-# random wallpaper.
 def try_get_active_wallpaper
-  if File.readable? FEH_BG
-    wp = File.read(FEH_BG)[/(?<=').+(?=')/]
-    return wp if File.exists?(String wp)
-  end
+  get_active_wallpaper || get_random_wallpaper
+end
 
-  get_random_wallpaper
+# Get wallpaper, last set by feh(1) as background, nil if failed.
+def get_active_wallpaper
+  wp = File.read(FEH_BG)[/(?<=').+(?=')/]
+  wp if File.exists?(String wp)
 end
 
 desc 'Lock current display using alock(1).'
