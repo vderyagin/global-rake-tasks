@@ -3,8 +3,7 @@ task :cleanup do
   clean = Rake::FileList.new
 
   list = [
-    '.emacs.d/image-dired/*',
-    '.emacs.d/semanticdb/*.cache',
+    '.emacs.d/image-dired',
     '.emacs.d/url',
     '.rbx',
     '.serverauth.*',
