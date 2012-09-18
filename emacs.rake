@@ -40,4 +40,31 @@ namespace :emacs do
       end
     end
   end
+
+  desc 'Delete all session persistance files.'
+  task :delete_persisted_session do
+    session = Rake::FileList.new.clear_exclude
+
+    [
+      '.emacs.desktop',
+      '.emacs.desktop.lock',
+      'eshell/history',
+      'eshell/lastdir',
+      'org-clock-save.el',
+      'recentf',
+      'recentf~',
+      'savehist',
+      'smex.save'
+    ].each do |file|
+      session.add File.expand_path(file, '~/.emacs.d')
+    end
+
+    session.existing!
+
+    if session.empty?
+      puts 'no files to delete.'
+    else
+      session.each &method(:rm_r)
+    end
+  end
 end
