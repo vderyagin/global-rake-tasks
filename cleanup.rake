@@ -2,16 +2,18 @@ desc 'Get rid of some trash in home directory.'
 task :cleanup do
   clean = Rake::FileList.new
 
-  list = [
+  [
     '.emacs.d/image-dired',
     '.emacs.d/url',
     '.rbx',
     '.serverauth.*',
     '.thumbnails',
     '.url',
-  ].map { |file| File.expand_path file, '~' }
+  ].each do |file|
+    clean.add File.expand_path(file, '~')
+  end
 
-  clean.include(list).existing!
+  clean.existing!
 
   if clean.empty?
     puts 'no files to delete.'
