@@ -12,7 +12,7 @@ namespace :emacs do
 
     puts stale
 
-    exit 1 unless stale.empty?
+    abort unless stale.empty?
   end
 
   desc 'Recompile all emacs configuration files.'
