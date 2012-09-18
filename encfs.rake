@@ -43,9 +43,17 @@ namespace :encfs do
     rmdir MOUNT_DIR if File.exists? MOUNT_DIR
   end
 
+  def ensure_mounted
+    abort 'filesystem is not mounted.' unless mounted?
+  end
+
+  def ensure_not_mounted
+    abort 'filesystem is already mounted.' if mounted?
+  end
+
   desc 'Mount encrypted directory.'
   task :mount do
-    sh 'notify-send', 'Filesystem is already mounted' if mounted?
+    ensure_not_mounted
 
     extpass_string = "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_DIR}:'"
     timeout = 60                          # minutes
@@ -67,10 +75,7 @@ namespace :encfs do
 
   desc 'Unmount encrypted directory.'
   task :umount do
-    unless mounted?
-      puts 'filesystem is not mounted.'
-      exit 1
-    end
+    ensure_mounted
 
     sh 'sudo', 'fusermount', '-uz', MOUNT_DIR do |ok, res|
       abort 'failed to unmount' unless ok
