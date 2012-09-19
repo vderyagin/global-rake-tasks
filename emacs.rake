@@ -36,7 +36,6 @@ namespace :emacs do
     Open3.popen2e *command do |input, output|
       output.each do |line|
         puts line if line =~ /^(Debugger entered|Error)/
-        # puts line if line =~ /^Wrote/
       end
     end
   end
