@@ -1,5 +1,4 @@
 namespace :git do
-
   def find_git_repo_root
     current_directory = Dir.pwd
 
