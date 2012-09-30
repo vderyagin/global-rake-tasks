@@ -9,6 +9,7 @@ task :cleanup do
     '.serverauth.*',
     '.thumbnails',
     '.url',
+    'tmp'
   ].each do |file|
     clean.add File.expand_path(file, '~')
   end
