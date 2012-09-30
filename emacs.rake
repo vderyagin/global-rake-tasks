@@ -49,6 +49,7 @@ namespace :emacs do
       '.emacs.desktop.lock',
       'eshell/history',
       'eshell/lastdir',
+      'ido-history',
       'org-clock-save.el',
       'recentf',
       'recentf~',
