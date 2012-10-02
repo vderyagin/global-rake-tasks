@@ -15,10 +15,6 @@ MTAB = '/etc/mtab'
 FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
 namespace :encfs do
-  def mount_successfull
-    puts 'filesystem mounted successfully'
-  end
-
   def mount_failed
 
     puts 'failed to mount encrypted filesystem.'
@@ -69,8 +65,10 @@ namespace :encfs do
     command << '--ondemand'
 
     sh *command do |ok, res|
-      ok ? mount_successfull : mount_failed
+      mount_failed unless ok
     end
+
+    Rake::Task['encfs:status'].invoke
   end
 
   desc 'Unmount encrypted directory.'
@@ -82,6 +80,8 @@ namespace :encfs do
     end
 
     cleanup
+
+    Rake::Task['encfs:status'].invoke
   end
 
   desc 'Tell whether encrypted filesystem is mounted.'
