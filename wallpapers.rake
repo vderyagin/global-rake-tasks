@@ -7,10 +7,10 @@ FEH_BG = File.expand_path '~/.fehbg'
 def get_random_wallpaper
   active = get_active_wallpaper
 
-  loop {
+  loop do
     random = Dir[File.join WALLPAPERS_DIRECTORY, '*'].sample
     break random if active != random
-  }
+  end
 end
 
 def try_get_active_wallpaper

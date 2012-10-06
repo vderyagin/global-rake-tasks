@@ -10,6 +10,7 @@ namespace :cleanup do
       '.serverauth.*',
       '.thumbnails',
       '.url',
+      'Downloads',
       'tmp'
     ].each do |file|
       clean.add File.expand_path(file, '~')
