@@ -16,7 +16,6 @@ FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
 namespace :encfs do
   def mount_failed
-
     puts 'failed to mount encrypted filesystem.'
 
     command = []

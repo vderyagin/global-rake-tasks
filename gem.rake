@@ -2,6 +2,7 @@ namespace :gem do
   DEFAULT_GEMS = [
     'awesome_print',
     'bundler',
+    'devel-which',
     'dotify',
     'nrename',
     'pry',
