@@ -1,5 +1,5 @@
 desc 'Generate Readme.md'
-file 'Readme.md' => 'Rakefile.rb' do
+file 'Readme.md' => Dir['*.rb', '*.rake'] do
   require 'erb'
 
   readme = <<EOL
