@@ -53,7 +53,8 @@ namespace :emacs do
       'org-clock-save.el',
       'recentf',
       'recentf~',
-      'savehist'
+      'savehist',
+      'smex-items'
     ].each do |file|
       session.add File.expand_path(file, '~/.emacs.d')
     end
