@@ -6,10 +6,12 @@ namespace :cleanup do
     [
       '.emacs.d/image-dired',
       '.emacs.d/url',
+      '.local/share/Trash',
       '.rbx',
       '.serverauth.*',
       '.thumbnails',
       '.url',
+      'Desktop',
       'Downloads',
       'tmp'
     ].each do |file|
