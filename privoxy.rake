@@ -1,7 +1,8 @@
 =begin
 
 Rake tasks for toggling privoxy on/off.
-Requires privoxy setup to allow such actions
+
+Requires "enable-remote-toggle" option to be enabled in privoxy configuration.
 
 =end
 
