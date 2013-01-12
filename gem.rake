@@ -8,7 +8,8 @@ namespace :gem do
     'pry',
     'pry-doc',
     'rake',
-    'rcodetools'
+    'rcodetools',
+    'twitter'
   ]
 
   desc 'Install some universally needed gems.'
