@@ -74,7 +74,7 @@ namespace :encfs do
   task :umount do
     ensure_mounted
 
-    sh 'sudo', '-A', 'fusermount', '-uz', MOUNT_DIR do |ok, res|
+    sh 'fusermount', '-uz', MOUNT_DIR do |ok, res|
       abort 'failed to unmount' unless ok
     end
 
