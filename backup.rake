@@ -1,10 +1,10 @@
 namespace :backup do
   def srm(*files)
-    sh 'srm', '-l', *files
+    sh 'srm', *files
   end
 
   def srm_r(*files)
-    sh 'srm', '-l', '-r', *files
+    sh 'srm', '--recursive', *files
   end
 
   def gpg_encrypt_symmetrically(file)
