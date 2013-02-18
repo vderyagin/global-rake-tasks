@@ -9,6 +9,7 @@ namespace :gem do
     'pry-doc',
     'rake',
     'rcodetools',
+    'travis',
     'twitter'
   ]
 
