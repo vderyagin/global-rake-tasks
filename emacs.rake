@@ -15,6 +15,21 @@ namespace :emacs do
     abort unless stale.empty?
   end
 
+  desc 'Find elisp bytecode files lacking source in ~/.emacs.d directory.'
+  task :find_orphan_bytecode do
+    require 'pathname'
+
+    home = Pathname.new Dir.home
+
+    orphans = Pathname.glob(File.expand_path '.emacs.d/**/*.elc', home).reject { |elc|
+      Pathname.new(elc.to_s.chomp('c')).exist?
+    }
+
+    puts orphans
+
+    abort unless orphans.empty?
+  end
+
   desc 'Recompile all emacs configuration files.'
   task :recompile_configs do
     require 'open3'

@@ -9,6 +9,7 @@ rake backup:ssh:public               # Make encrypted backup of public SSH keys.
 rake cleanup:cruft                   # Get rid of some trash in home directory.
 rake cleanup:torrents                # Get rid of *.torrent files in home directory.
 rake emacs:delete_persisted_session  # Delete all session persistance files.
+rake emacs:find_orphan_bytecode      # Find elisp bytecode files lacking source in ~/.emacs.d directory.
 rake emacs:find_stale_bytecode       # Find stale elisp bytecode in ~/.emacs.d directory.
 rake emacs:recompile_configs         # Recompile all emacs configuration files.
 rake encfs:mount                     # Mount encrypted directory.
