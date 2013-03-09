@@ -23,7 +23,7 @@ namespace :emacs do
 
     orphans = Pathname.glob(File.expand_path '.emacs.d/**/*.elc', home).reject { |elc|
       Pathname.new(elc.to_s.chomp('c')).exist?
-    }
+    }.map &:to_s
 
     puts orphans
 
