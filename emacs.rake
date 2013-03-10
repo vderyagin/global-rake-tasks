@@ -48,6 +48,8 @@ namespace :emacs do
       command << src
     end
 
+    rm_f Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.elc'], verbose: false
+
     Open3.popen2e *command do |input, output|
       output.each do |line|
         puts line if line =~ /^(Debugger entered|Error)/
