@@ -4,12 +4,14 @@ namespace :gem do
     'bundler',
     'devel-which',
     'dotify',
+    'interactive_editor',
     'nrename',
     'pry',
     'pry-doc',
     'rake',
     'rcodetools',
     'travis',
+    'travis-lint',
     'twitter'
   ]
 
