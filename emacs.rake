@@ -53,6 +53,22 @@ namespace :emacs do
     sh *command
   end
 
+  desc 'Regenerate all el-get autoloads.'
+  task :regenerate_autoloads do
+    require 'open3'
+
+    init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
+
+    command = []
+    command << 'emacs'
+    command << '--quick'
+    command << '--load' << init_file
+    command << '--batch'
+    command << '--funcall' << 'el-get-regenerate-all-autoloads'
+
+    sh *command
+  end
+
   desc 'Delete all session persistance files.'
   task :delete_persisted_session do
     session = Rake::FileList.new.clear_exclude
