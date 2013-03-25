@@ -50,7 +50,7 @@ namespace :emacs do
 
     rm_f Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.elc'], verbose: false
 
-    sh *command
+    system *command            # Kernel#system is less noisy then FileUtils#sh
   end
 
   desc 'Regenerate all el-get autoloads.'
