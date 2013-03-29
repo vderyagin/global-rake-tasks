@@ -1,4 +1,7 @@
 namespace :emacs do
+  desc 'locate stale and orphaned bytecode im  ~/.emacs.d directory.'
+  task :find_cruft => [:find_stale_bytecode, :find_orphan_bytecode]
+
   desc 'Find stale elisp bytecode in ~/.emacs.d directory.'
   task :find_stale_bytecode do
     require 'pathname'
