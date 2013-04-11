@@ -26,7 +26,7 @@ namespace :emacs do
 
     orphans = Pathname.glob(File.expand_path '.emacs.d/**/*.elc', home).reject { |elc|
       Pathname.new(elc.to_s.chomp('c')).exist?
-    }.map &:to_s
+    }.map(&:to_s)
 
     puts orphans
 
@@ -53,7 +53,7 @@ namespace :emacs do
 
     rm_f Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.elc'], verbose: false
 
-    system *command            # Kernel#system is less noisy then FileUtils#sh
+    system(*command)            # Kernel#system is less noisy then FileUtils#sh
   end
 
   desc 'Regenerate all el-get autoloads.'
@@ -69,7 +69,7 @@ namespace :emacs do
     command << '--batch'
     command << '--funcall' << 'el-get-regenerate-all-autoloads'
 
-    sh *command
+    sh(*command)
   end
 
   desc 'Delete all session persistance files.'
@@ -96,7 +96,7 @@ namespace :emacs do
     if session.empty?
       puts 'no files to delete.'
     else
-      session.each &method(:rm_r)
+      session.each(&method(:rm_r))
     end
   end
 end
