@@ -3,7 +3,7 @@ task :sqlite_vacuum do
   wildcards = [
     '~/.mozilla/firefox/**/*.sqlite',
     '~/.thunderbird/**/*.sqlite'
-  ].map &(File.method :expand_path)
+  ].map(&(File.method :expand_path))
 
   wildcards.each do |wildcard|
     Dir.glob wildcard do |db|

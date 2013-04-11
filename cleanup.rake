@@ -23,7 +23,7 @@ namespace :cleanup do
     if clean.empty?
       puts 'no files to delete.'
     else
-      clean.each &method(:rm_r)
+      clean.each(&method(:rm_r))
     end
   end
 
@@ -36,7 +36,7 @@ namespace :cleanup do
     if torrents.empty?
       puts 'no files to delete.'
     else
-      torrents.each &method(:rm_r)
+      torrents.each(&method(:rm_r))
     end
   end
 end

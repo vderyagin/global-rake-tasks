@@ -25,7 +25,7 @@ namespace :encfs do
     command << '-u' << 'critical'
     command << "--icon=#{FAIL_ICON}" if File.exists? FAIL_ICON
 
-    sh *command
+    sh(*command)
 
     cleanup
   end
@@ -63,7 +63,7 @@ namespace :encfs do
     command << "--idle=#{timeout}"
     command << '--ondemand'
 
-    sh *command do |ok, res|
+    sh(*command) do |ok, res|
       mount_failed unless ok
     end
 

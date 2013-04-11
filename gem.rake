@@ -27,7 +27,7 @@ namespace :gem do
 
   desc 'Uninstall all gems.'
   task :uninstall_all do
-    all_gems = IO.popen(['gem', 'list', '--no-version']).readlines.map &:chomp
+    all_gems = IO.popen(['gem', 'list', '--no-version']).readlines.map(&:chomp)
     sh 'gem', 'uninstall', '--all', '--executables', '--ignore-dependencies', *all_gems
   end
 end
