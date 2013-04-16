@@ -3,13 +3,13 @@ namespace :gem do
     'awesome_print',
     'bundler',
     'devel-which',
-    'dotify',
     'interactive_editor',
     'nrename',
     'pry',
     'pry-doc',
     'rake',
     'rcodetools',
+    'thor',
     'travis',
     'travis-lint',
     'twitter'
@@ -27,7 +27,9 @@ namespace :gem do
 
   desc 'Uninstall all gems.'
   task :uninstall_all do
+    args = ['uninstall', '--all', '--executables', '--ignore-dependencies']
     all_gems = IO.popen(['gem', 'list', '--no-version']).readlines.map(&:chomp)
-    sh 'gem', 'uninstall', '--all', '--executables', '--ignore-dependencies', *all_gems
+
+    sh 'gem', *args, *all_gems
   end
 end
