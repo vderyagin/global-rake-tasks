@@ -9,10 +9,11 @@ namespace :gem do
     'pry-doc',
     'rake',
     'rcodetools',
+    'rubocop',
     'thor',
     'travis',
     'travis-lint',
-    'twitter'
+    'twitter',
   ]
 
   desc 'Install some universally needed gems.'
