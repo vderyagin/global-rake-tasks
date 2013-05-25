@@ -7,7 +7,7 @@ namespace :gem do
     interactive_editor
     nrename
     pry
-    pry-doc
+    pry-plus
     rake
     rcodetools
     rubocop
