@@ -1,20 +1,21 @@
 namespace :gem do
-  DEFAULT_GEMS = [
-    'awesome_print',
-    'bundler',
-    'devel-which',
-    'interactive_editor',
-    'nrename',
-    'pry',
-    'pry-doc',
-    'rake',
-    'rcodetools',
-    'rubocop',
-    'thor',
-    'travis',
-    'travis-lint',
-    'twitter',
-  ]
+  DEFAULT_GEMS = %w(
+    awesome_print
+    bundler
+    devel-which
+    heroku
+    interactive_editor
+    nrename
+    pry
+    pry-doc
+    rake
+    rcodetools
+    rubocop
+    thor
+    travis
+    travis-lint
+    twitter
+  )
 
   desc 'Install some universally needed gems.'
   task :install_default do
@@ -28,8 +29,8 @@ namespace :gem do
 
   desc 'Uninstall all gems.'
   task :uninstall_all do
-    args = ['uninstall', '--all', '--executables', '--ignore-dependencies']
-    all_gems = IO.popen(['gem', 'list', '--no-version']).readlines.map(&:chomp)
+    args = %w(uninstall --all --executables --ignore-dependencies)
+    all_gems = IO.popen(%w(gem list --no-version)).readlines.map(&:chomp)
 
     sh 'gem', *args, *all_gems
   end
