@@ -50,7 +50,9 @@ namespace :encfs do
   task :mount do
     ensure_not_mounted
 
-    extpass_string = "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_DIR}:'"
+    extpass_string =
+      "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_DIR}:'"
+
     timeout = 60                          # minutes
 
     mkdir MOUNT_DIR unless File.exists? MOUNT_DIR
@@ -86,8 +88,12 @@ namespace :encfs do
   desc 'Tell whether encrypted filesystem is mounted.'
   task :status do
     print MOUNT_DIR
-    puts mounted? ? " is \e[1m\e[32mMOUNTED\e[0m" : " is \e[1m\e[31mNOT MOUNTED\e[0m"
+    if mounted?
+      puts " is \e[1m\e[32mMOUNTED\e[0m"
+    else
+      puts " is \e[1m\e[31mNOT MOUNTED\e[0m"
+    end
   end
 end
 
-task :encfs => 'encfs:mount'
+task encfs: 'encfs:mount'

@@ -1,5 +1,5 @@
-DROPBOX_PUBLIC_DIRECTORY = File.expand_path '~/misc/Dropbox/Public'
-SCREENSHOTS_DIRECTORY = File.expand_path 'screenshots', DROPBOX_PUBLIC_DIRECTORY
+DROPBOX_PUBLIC_DIR = File.expand_path '~/misc/Dropbox/Public'
+SHOTS_DIR = File.expand_path 'screenshots', DROPBOX_PUBLIC_DIR
 
 def screenshot_name
   @screenshot_name ||= Time.now.strftime 'screenshot_%Y-%m-%d_%H-%M-%S.png'
@@ -10,7 +10,7 @@ def screenshot_url
 end
 
 def put_in_clipboard(text)
-  IO.popen ['xclip', '-selection', 'clipboard'], 'w' do |process|
+  IO.popen %w(xclip -selection clipboard), 'w' do |process|
     process.write text
     process.close_write
   end
@@ -20,10 +20,10 @@ def take_screenshot
   sh 'scrot', screenshot_name
 end
 
-desc 'Take screenshot, share it on dropbox.com and put link to it in clipboard.'
+desc 'Take screenshot, share it on dropbox.com and put url in clipboard.'
 task :share_screenshot do
-  mkdir SCREENSHOTS_DIRECTORY unless File.exists? SCREENSHOTS_DIRECTORY
-  cd SCREENSHOTS_DIRECTORY
+  mkdir SHOTS_DIR unless File.exists? SHOTS_DIR
+  cd SHOTS_DIR
 
   take_screenshot
   put_in_clipboard screenshot_url

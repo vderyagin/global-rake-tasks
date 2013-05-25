@@ -14,7 +14,7 @@ namespace :update do
   end
 
   desc 'Update rbenv installation'
-  task :rbenv => [:ruby_build, :gem_rehash] do
+  task rbenv: %i(ruby_build gem_rehash) do
     update_git_repo '~/.rbenv'
   end
 

@@ -3,18 +3,18 @@ namespace :cleanup do
   task :cruft do
     clean = Rake::FileList.new
 
-    [
-      '.emacs.d/image-dired',
-      '.emacs.d/url',
-      '.local/share/Trash',
-      '.rbx',
-      '.serverauth.*',
-      '.thumbnails',
-      '.url',
-      'Desktop',
-      'Downloads',
-      'tmp'
-    ].each do |file|
+    %w(
+      .emacs.d/image-dired
+      .emacs.d/url
+      .local/share/Trash
+      .rbx
+      .serverauth.*
+      .thumbnails
+      .url
+      Desktop
+      Downloads
+      tmp
+    ).each do |file|
       clean.add File.expand_path(file, '~')
     end
 

@@ -81,5 +81,5 @@ namespace :backup do
     end
   end
 
-  task :ssh => 'ssh:all'
+  task ssh: 'ssh:all'
 end

@@ -57,4 +57,4 @@ namespace :wp do
   end
 end
 
-task :wp => 'wp:random'
+task wp: 'wp:random'

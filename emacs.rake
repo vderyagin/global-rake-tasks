@@ -1,14 +1,14 @@
 namespace :emacs do
   desc 'locate stale and orphaned bytecode im  ~/.emacs.d directory.'
-  task :find_cruft => [:find_stale_bytecode, :find_orphan_bytecode]
+  task find_cruft: %i(find_stale_bytecode find_orphan_bytecode)
 
   desc 'Find stale elisp bytecode in ~/.emacs.d directory.'
   task :find_stale_bytecode do
     require 'pathname'
 
-    home = Pathname.new Dir.home
+    wildcard = File.expand_path('~/.emacs.d/**/*.el')
 
-    stale = Pathname.glob(File.expand_path '.emacs.d/**/*.el', home).select { |el|
+    stale = Pathname.glob(wildcard).select { |el|
       elc = Pathname.new "#{el}c"
       elc.exist? and elc.mtime < el.mtime
     }.map { |el| "#{el}c" }
@@ -22,9 +22,9 @@ namespace :emacs do
   task :find_orphan_bytecode do
     require 'pathname'
 
-    home = Pathname.new Dir.home
+    wildcard = File.expand_path('~/.emacs.d/**/*.elc')
 
-    orphans = Pathname.glob(File.expand_path '.emacs.d/**/*.elc', home).reject { |elc|
+    orphans = Pathname.glob(wildcard).reject { |elc|
       Pathname.new(elc.to_s.chomp('c')).exist?
     }.map(&:to_s)
 
@@ -51,7 +51,9 @@ namespace :emacs do
       command << src
     end
 
-    rm_f Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.elc'], verbose: false
+    wildcard = File.expand_path('~/.emacs.d/dotemacs/conf/**/*.elc')
+
+    rm_f Dir[wildcard], verbose: false
 
     system(*command)            # Kernel#system is less noisy then FileUtils#sh
   end
@@ -76,17 +78,17 @@ namespace :emacs do
   task :delete_persisted_session do
     session = Rake::FileList.new.clear_exclude
 
-    [
-      '.emacs.desktop',
-      '.emacs.desktop.lock',
-      'eshell/history',
-      'eshell/lastdir',
-      'ido-history',
-      'org-clock-save.el',
-      'recentf',
-      'recentf~',
-      'slime-repl-history',
-    ].each do |file|
+    %w(
+      .emacs.desktop
+      .emacs.desktop.lock
+      eshell/history
+      eshell/lastdir
+      ido-history
+      org-clock-save.el
+      recentf
+      recentf~
+      slime-repl-history
+    ).each do |file|
       session.add File.expand_path(file, '~/.emacs.d')
     end
 
