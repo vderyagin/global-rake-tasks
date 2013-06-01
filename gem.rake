@@ -3,7 +3,6 @@ namespace :gem do
     awesome_print
     bundler
     devel-which
-    heroku
     interactive_editor
     nrename
     pry
