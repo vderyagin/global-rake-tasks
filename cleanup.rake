@@ -4,9 +4,13 @@ namespace :cleanup do
     clean = Rake::FileList.new
 
     %w(
+      .adobe
+      .darcs
       .emacs.d/image-dired
       .emacs.d/url
+      .fontconfig
       .local/share/Trash
+      .macromeda
       .rbx
       .serverauth.*
       .thumbnails
