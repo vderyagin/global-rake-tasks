@@ -1,10 +1,15 @@
 ENV['DISPLAY'] ||= ':0'
 
-WALLPAPERS_BASE_DIRECTORY = File.expand_path('~/.wallpapers')
 FEH_BG = File.expand_path '~/.fehbg'
 
+def wallpapers_base_dir
+  File.expand_path(ENV['WALLPAPERS_DIR']).tap do |dir|
+    abourt "directory '#{dir}' does_not exist" unless File.directory?(dir)
+  end
+end
+
 def wallpapers_directory
-  File.expand_path(resolution, WALLPAPERS_BASE_DIRECTORY).tap do |dir|
+  File.expand_path(resolution, wallpapers_base_dir).tap do |dir|
     abort "directory '#{dir}' does not exist" unless File.directory?(dir)
   end
 end
@@ -49,7 +54,7 @@ namespace :wp do
     require 'pathname'
     require 'securerandom'
 
-    Pathname.glob File.join(WALLPAPERS_BASE_DIRECTORY, '**/*.jpg') do |old|
+    Pathname.glob File.join(wallpapers_base_dir, '**/*.jpg') do |old|
       new_basename = SecureRandom.uuid + old.extname.downcase
       new_path = old.dirname + new_basename
       old.rename new_path
