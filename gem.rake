@@ -29,8 +29,29 @@ namespace :gem do
   desc 'Uninstall all gems.'
   task :uninstall_all do
     args = %w(uninstall --all --executables --ignore-dependencies)
-    all_gems = IO.popen(%w(gem list --no-version)).readlines.map(&:chomp)
+    gems = all_gems - builtin_gems
 
-    sh 'gem', *args, *all_gems
+    if gems.empty?
+      warn 'no gems to uninstall'
+    else
+      sh 'gem', *args, *gems
+    end
+  end
+
+  def all_gems
+    IO.popen(%w(gem list --no-version)).readlines.map(&:chomp)
+  end
+
+  def builtin_gems
+    %w(
+      test-unit
+      psych
+      rdoc
+      io-console
+      json
+      bigdecimal
+      rake
+      minitest
+    )
   end
 end
