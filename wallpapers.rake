@@ -1,14 +1,24 @@
 ENV['DISPLAY'] ||= ':0'
 
-WALLPAPERS_DIRECTORY = File.expand_path '~/.wallpapers'
+WALLPAPERS_BASE_DIRECTORY = File.expand_path('~/.wallpapers')
 FEH_BG = File.expand_path '~/.fehbg'
 
-# Return random wallpaper from WALLPAPERS_DIRECTORY.
+def wallpapers_directory
+  dir = File.expand_path(resolution, WALLPAPERS_BASE_DIRECTORY)
+  abort "directory '#{dir}' does not exist" unless File.directory?(dir)
+  dir
+end
+
+def resolution
+  @res ||= `xrandr --query`[/(?<= connected )\d+x\d+/]
+end
+
+# Return random wallpaper from wallpapers_directory.
 def get_random_wallpaper
   active = get_active_wallpaper
 
   loop do
-    random = Dir[File.join WALLPAPERS_DIRECTORY, '*'].sample
+    random = Dir[File.join wallpapers_directory, '*'].sample
     break random if active != random
   end
 end
@@ -31,7 +41,7 @@ end
 
 namespace :wp do
   def set_wallpaper(wallpaper)
-    IO.popen ['feh', '--bg-scale', wallpaper]
+    IO.popen ['feh', '--bg-center', wallpaper]
   end
 
   desc 'Randomly rename all wallpapers.'
@@ -39,7 +49,7 @@ namespace :wp do
     require 'pathname'
     require 'securerandom'
 
-    Pathname.glob File.join(WALLPAPERS_DIRECTORY, '*') do |old|
+    Pathname.glob File.join(WALLPAPERS_BASE_DIRECTORY, '**/*.jpg') do |old|
       new_basename = SecureRandom.uuid + old.extname.downcase
       new_path = old.dirname + new_basename
       old.rename new_path
