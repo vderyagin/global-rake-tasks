@@ -4,9 +4,9 @@ WALLPAPERS_BASE_DIRECTORY = File.expand_path('~/.wallpapers')
 FEH_BG = File.expand_path '~/.fehbg'
 
 def wallpapers_directory
-  dir = File.expand_path(resolution, WALLPAPERS_BASE_DIRECTORY)
-  abort "directory '#{dir}' does not exist" unless File.directory?(dir)
-  dir
+  File.expand_path(resolution, WALLPAPERS_BASE_DIRECTORY).tap do |dir|
+    abort "directory '#{dir}' does not exist" unless File.directory?(dir)
+  end
 end
 
 def resolution
@@ -14,8 +14,8 @@ def resolution
 end
 
 # Return random wallpaper from wallpapers_directory.
-def get_random_wallpaper
-  active = get_active_wallpaper
+def random_wallpaper
+  active = active_wallpaper
 
   loop do
     random = Dir[File.join wallpapers_directory, '*'].sample
@@ -24,11 +24,11 @@ def get_random_wallpaper
 end
 
 def try_get_active_wallpaper
-  get_active_wallpaper || get_random_wallpaper
+  active_wallpaper || random_wallpaper
 end
 
 # Get wallpaper, last set by feh(1) as background, nil if failed.
-def get_active_wallpaper
+def active_wallpaper
   wp = File.read(FEH_BG)[/(?<=').+(?=')/]
   wp if File.exists?(String wp)
 end
@@ -58,7 +58,7 @@ namespace :wp do
 
   desc 'Set random wallpater on current display using feh(1).'
   task :random do
-    set_wallpaper get_random_wallpaper
+    set_wallpaper random_wallpaper
   end
 
   desc 'Set last used wallpaper on current display using feh(1).'
