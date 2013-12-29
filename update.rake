@@ -14,17 +14,12 @@ namespace :update do
   end
 
   desc 'Update rbenv installation'
-  task rbenv: %i(ruby_build gem_rehash) do
+  task rbenv: %i(ruby_build) do
     update_git_repo '~/.rbenv'
   end
 
   desc 'Update ruby-build plugin of rbenv'
   task :ruby_build do
     update_git_repo '~/.rbenv/plugins/ruby-build'
-  end
-
-  desc 'Update gem-rehash plugin of rbenv'
-  task :gem_rehash do
-    update_git_repo '~/.rbenv/plugins/rbenv-gem-rehash'
   end
 end
