@@ -1,29 +1,12 @@
 namespace :gem do
-  DEFAULT_GEMS = %w(
-    awesome_print
-    bundler
-    devel-which
-    interactive_editor
-    nrename
-    pry
-    pry-plus
-    rake
-    rcodetools
-    rubocop
-    thor
-    travis
-    travis-lint
-    twitter
-  )
-
   desc 'Install some universally needed gems.'
   task :install_default do
-    sh 'gem', 'install', *DEFAULT_GEMS
+    sh 'gem', 'install', *(default_gems - all_gems)
   end
 
   desc 'Update gems installed by default.'
   task :update_default do
-    sh 'gem', 'update', *DEFAULT_GEMS
+    sh 'gem', 'update', *default_gems
   end
 
   desc 'Uninstall all gems.'
@@ -39,7 +22,9 @@ namespace :gem do
   end
 
   def all_gems
-    IO.popen(%w(gem list --no-version)).readlines.map(&:chomp)
+    IO.popen(%w(gem list --no-version))
+      .readlines
+      .map(&:chomp)
   end
 
   def builtin_gems
@@ -52,6 +37,25 @@ namespace :gem do
       bigdecimal
       rake
       minitest
+    )
+  end
+
+  def default_gems
+    %w(
+      awesome_print
+      bundler
+      devel-which
+      interactive_editor
+      nrename
+      pry
+      pry-plus
+      rake
+      rcodetools
+      rubocop
+      thor
+      travis
+      travis-lint
+      twitter
     )
   end
 end
