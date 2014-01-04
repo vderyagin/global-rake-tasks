@@ -28,27 +28,25 @@ def random_wallpaper
   end
 end
 
-def try_get_active_wallpaper
-  active_wallpaper || random_wallpaper
-end
-
 # Get wallpaper, last set by feh(1) as background, nil if failed.
 def active_wallpaper
-  wp = File.read(FEH_BG)[/(?<=').+(?=')/]
-  wp if File.exists?(String wp)
+  File.read(FEH_BG)[/(?<=').+(?=')/].tap do |wp|
+    return unless File.exists?(String wp)
+  end
 end
 
 desc 'Lock current display using alock(1).'
 task :lock_screen do
-  wallpaper = try_get_active_wallpaper
-  IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wallpaper}"]
+  (active_wallpaper || random_wallpaper).tap do |wp|
+    IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wp}"]
+  end
+end
+
+def use_wallpaper(wallpaper)
+  IO.popen ['feh', '--bg-fill', wallpaper]
 end
 
 namespace :wp do
-  def set_wallpaper(wallpaper)
-    IO.popen ['feh', '--bg-center', wallpaper]
-  end
-
   desc 'Randomly rename all wallpapers.'
   task :rename do
     require 'pathname'
@@ -63,12 +61,12 @@ namespace :wp do
 
   desc 'Set random wallpater on current display using feh(1).'
   task :random do
-    set_wallpaper random_wallpaper
+    use_wallpaper random_wallpaper
   end
 
   desc 'Set last used wallpaper on current display using feh(1).'
   task :active do
-    set_wallpaper try_get_active_wallpaper
+    use_wallpaper(active_wallpaper || random_wallpaper)
   end
 end
 
