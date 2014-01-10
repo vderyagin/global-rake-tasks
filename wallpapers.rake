@@ -47,7 +47,7 @@ namespace :wp do
     require 'pathname'
     require 'securerandom'
 
-    Pathname.glob File.join(wallpapers_directory, '**/*.jpg') do |old|
+    Pathname.glob File.join(wallpapers_directory, '**/*.jpg'), File::FNM_DOTMATCH do |old|
       new_basename = SecureRandom.uuid + old.extname.downcase
       new_path = old.dirname + new_basename
       old.rename new_path
