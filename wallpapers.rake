@@ -4,7 +4,7 @@ FEH_BG = File.expand_path '~/.fehbg'
 
 def wallpapers_directory
   File.expand_path(ENV['WALLPAPERS_DIR']).tap do |dir|
-    abourt "directory '#{dir}' does_not exist" unless File.directory?(dir)
+    abort "directory '#{dir}' does_not exist" unless File.directory?(dir)
   end
 end
 
