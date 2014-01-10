@@ -18,6 +18,7 @@ namespace :cleanup do
       Desktop
       Downloads
       tmp
+      .local/share/recently-used.xbel
     ).each do |file|
       clean.add File.expand_path(file, '~')
     end
