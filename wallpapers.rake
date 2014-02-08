@@ -1,6 +1,7 @@
 ENV['DISPLAY'] ||= ':0'
 
 FEH_BG = File.expand_path '~/.fehbg'
+UUID_REGEX = /\A\h{8}(-\h{4}){3}-\h{12}\z/
 
 def wallpapers_directory
   File.expand_path(ENV['WALLPAPERS_DIR']).tap do |dir|
@@ -48,6 +49,8 @@ namespace :wp do
     require 'securerandom'
 
     Pathname.glob File.join(wallpapers_directory, '**/*.jpg'), File::FNM_DOTMATCH do |old|
+      next if old.basename('.*').to_s[UUID_REGEX]
+
       new_basename = SecureRandom.uuid + old.extname.downcase
       new_path = old.dirname + new_basename
       old.rename new_path
