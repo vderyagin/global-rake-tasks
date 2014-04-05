@@ -1,7 +1,13 @@
 namespace :gem do
   desc 'Install some universally needed gems.'
   task :install_default do
-    sh 'gem', 'install', *(default_gems - all_gems)
+    gems_to_install = default_gems - all_gems
+
+    if gems_to_install.empty?
+      warn 'all default gems are installed already'
+    else
+      sh 'gem', 'install', *gems_to_install
+    end
   end
 
   desc 'Update gems installed by default.'
