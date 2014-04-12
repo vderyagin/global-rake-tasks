@@ -58,6 +58,7 @@ namespace :gem do
       rake
       rcodetools
       rubocop
+      t
       thor
       travis
       travis-lint
