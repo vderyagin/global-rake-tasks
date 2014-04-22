@@ -1,13 +1,7 @@
 # List of tasks: #
 
 ```
-rake backup:gmail                    # Make encrypted backup of gmail data
-rake backup:gpg_keys                 # Make encrypted backup of gpg keys
-rake backup:org                      # Make encrypted backup of encrypted org files
-rake backup:ssh:all                  # Make encrypted backup of all SSH keys
-rake backup:ssh:public               # Make encrypted backup of public SSH keys
 rake cleanup:cruft                   # Get rid of some trash in home directory
-rake cleanup:torrents                # Get rid of *.torrent files in home directory
 rake emacs:delete_persisted_session  # Delete all session persistance files
 rake emacs:find_cruft                # locate stale and orphaned bytecode im  ~/.emacs.d directory
 rake emacs:find_orphan_bytecode      # Find elisp bytecode files lacking source in ~/.emacs.d directory
