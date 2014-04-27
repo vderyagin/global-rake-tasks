@@ -23,7 +23,7 @@ def active_wallpaper
   @active_wapplaper ||=
     begin
       File.read(FEH_BG)[/(?<=').+(?=')/].tap do |wp|
-        return unless File.exists?(String wp)
+        return unless File.exist?(String(wp))
       end
     rescue Errno::ENOENT
       warn "No #{FEH_BG} found"
@@ -48,7 +48,9 @@ namespace :wp do
     require 'pathname'
     require 'securerandom'
 
-    Pathname.glob File.join(wallpapers_directory, '**/*.jpg'), File::FNM_DOTMATCH do |old|
+    wallpapers_glob = File.join(wallpapers_directory, '**/*.jpg')
+
+    Pathname.glob wallpapers_glob, File::FNM_DOTMATCH do |old|
       next if old.basename('.*').to_s[UUID_REGEX]
 
       new_basename = SecureRandom.uuid + old.extname.downcase

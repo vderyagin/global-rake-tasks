@@ -22,7 +22,7 @@ end
 
 desc 'Take screenshot, share it on dropbox.com and put url in clipboard.'
 task :share_screenshot do
-  mkdir SHOTS_DIR unless File.exists? SHOTS_DIR
+  mkdir SHOTS_DIR unless File.exist?(SHOTS_DIR)
   cd SHOTS_DIR
 
   take_screenshot

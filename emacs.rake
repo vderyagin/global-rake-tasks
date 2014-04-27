@@ -1,3 +1,8 @@
+def stale_bytecode?(source_file)
+  bytecode = Pathname.new "#{source_file}c"
+  bytecode.exist? && bytecode.mtime < source_file.mtime
+end
+
 namespace :emacs do
   desc 'locate stale and orphaned bytecode im  ~/.emacs.d directory.'
   task find_cruft: %i(find_stale_bytecode find_orphan_bytecode)
@@ -8,10 +13,9 @@ namespace :emacs do
 
     wildcard = File.expand_path('~/.emacs.d/**/*.el')
 
-    stale = Pathname.glob(wildcard).select { |el|
-      elc = Pathname.new "#{el}c"
-      elc.exist? and elc.mtime < el.mtime
-    }.map { |el| "#{el}c" }
+    stale = Pathname.glob(wildcard)
+      .select(&method(:stale_bytecode?))
+      .map { |el| "#{el}c" }
 
     puts stale
 

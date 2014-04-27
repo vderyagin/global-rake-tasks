@@ -23,7 +23,7 @@ namespace :encfs do
     command << 'Failed to mount encrypted filesystem'
     command << 'Try again'
     command << '-u' << 'critical'
-    command << "--icon=#{FAIL_ICON}" if File.exists? FAIL_ICON
+    command << "--icon=#{FAIL_ICON}" if File.exist?(FAIL_ICON)
 
     sh(*command)
 
@@ -31,11 +31,11 @@ namespace :encfs do
   end
 
   def mounted?
-    File.readlines(MTAB).any? { |line| line.include? MOUNT_DIR }
+    File.readlines(MTAB).any? { |line| line.include?(MOUNT_DIR) }
   end
 
   def cleanup
-    rmdir MOUNT_DIR if File.exists? MOUNT_DIR
+    rmdir MOUNT_DIR if File.exist?(MOUNT_DIR)
   end
 
   def ensure_mounted
@@ -55,7 +55,7 @@ namespace :encfs do
 
     timeout = 60                          # minutes
 
-    mkdir MOUNT_DIR unless File.exists? MOUNT_DIR
+    mkdir MOUNT_DIR unless File.exist?(MOUNT_DIR)
 
     command = []
     command << 'encfs'
@@ -65,7 +65,7 @@ namespace :encfs do
     command << "--idle=#{timeout}"
     command << '--ondemand'
 
-    sh(*command) do |ok, res|
+    sh(*command) do |ok, _|
       mount_failed unless ok
     end
 
@@ -76,7 +76,7 @@ namespace :encfs do
   task :umount do
     ensure_mounted
 
-    sh 'fusermount', '-uz', MOUNT_DIR do |ok, res|
+    sh 'fusermount', '-uz', MOUNT_DIR do |ok, _|
       abort 'failed to unmount' unless ok
     end
 
