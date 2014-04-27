@@ -1,7 +1,7 @@
 namespace :gem do
   desc 'Install some universally needed gems.'
   task :install_default do
-    gems_to_install = default_gems - all_gems
+    gems_to_install = default_gems - installed_gems
 
     if gems_to_install.empty?
       warn 'all default gems are installed already'
@@ -18,7 +18,7 @@ namespace :gem do
   desc 'Uninstall all gems.'
   task :uninstall_all do
     args = %w(uninstall --all --executables --ignore-dependencies)
-    gems = all_gems - builtin_gems
+    gems = installed_gems - builtin_gems
 
     if gems.empty?
       warn 'no gems to uninstall'
@@ -27,7 +27,7 @@ namespace :gem do
     end
   end
 
-  def all_gems
+  def installed_gems
     IO.popen(%w(gem list --no-version))
       .readlines
       .map(&:chomp)
@@ -50,6 +50,7 @@ namespace :gem do
     %w(
       awesome_print
       bundler
+      chef-solo
       devel-which
       interactive_editor
       nrename
