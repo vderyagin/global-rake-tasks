@@ -1,3 +1,43 @@
+def installed_gems
+  IO.popen(%w(gem list --no-version))
+    .readlines
+    .map(&:chomp)
+end
+
+def builtin_gems
+  %w(
+    bigdecimal
+    io-console
+    json
+    minitest
+    psych
+    rake
+    rdoc
+    test-unit
+  )
+end
+
+def default_gems
+  %w(
+    awesome_print
+    bundler
+    chef
+    devel-which
+    interactive_editor
+    nrename
+    pry
+    pry-plus
+    rake
+    rcodetools
+    rubocop
+    t
+    thor
+    travis
+    travis-lint
+    twitter
+  )
+end
+
 namespace :gem do
   desc 'Install some universally needed gems.'
   task :install_default do
@@ -25,45 +65,5 @@ namespace :gem do
     else
       sh 'gem', *args, *gems
     end
-  end
-
-  def installed_gems
-    IO.popen(%w(gem list --no-version))
-      .readlines
-      .map(&:chomp)
-  end
-
-  def builtin_gems
-    %w(
-      test-unit
-      psych
-      rdoc
-      io-console
-      json
-      bigdecimal
-      rake
-      minitest
-    )
-  end
-
-  def default_gems
-    %w(
-      awesome_print
-      bundler
-      chef
-      devel-which
-      interactive_editor
-      nrename
-      pry
-      pry-plus
-      rake
-      rcodetools
-      rubocop
-      t
-      thor
-      travis
-      travis-lint
-      twitter
-    )
   end
 end
