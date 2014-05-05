@@ -16,7 +16,6 @@ rake gem:uninstall_all               # Uninstall all gems
 rake gem:update_default              # Update gems installed by default
 rake gists                           # clone my public gists
 rake lock_screen                     # Lock current display using alock(1)
-rake longlines                       # Locate lines of code, that are too long
 rake privoxy:disable                 # Disable privoxy
 rake privoxy:enable                  # Enable privoxy
 rake share_screenshot                # Take screenshot, share it on dropbox.com and put url in clipboard

@@ -14,38 +14,37 @@ MOUNT_DIR = File.expand_path '~/temp/encrypted'
 MTAB = '/etc/mtab'
 FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
+def mount_failed
+  warn 'failed to mount encrypted filesystem.'
+
+  sh(*[].tap do |cmd|
+        cmd << 'notify-send'
+        cmd << 'Failed to mount encrypted filesystem'
+        cmd << 'Try again'
+        cmd << '-u' << 'critical'
+        cmd << "--icon=#{FAIL_ICON}" if File.exist?(FAIL_ICON)
+      end)
+
+  cleanup
+end
+
+def mounted?
+  File.readlines(MTAB).any? { |line| line.include?(MOUNT_DIR) }
+end
+
+def cleanup
+  rmdir MOUNT_DIR if File.exist?(MOUNT_DIR)
+end
+
+def ensure_mounted
+  abort 'filesystem is not mounted.' unless mounted?
+end
+
+def ensure_not_mounted
+  abort 'filesystem is already mounted.' if mounted?
+end
+
 namespace :encfs do
-  def mount_failed
-    puts 'failed to mount encrypted filesystem.'
-
-    command = []
-    command << 'notify-send'
-    command << 'Failed to mount encrypted filesystem'
-    command << 'Try again'
-    command << '-u' << 'critical'
-    command << "--icon=#{FAIL_ICON}" if File.exist?(FAIL_ICON)
-
-    sh(*command)
-
-    cleanup
-  end
-
-  def mounted?
-    File.readlines(MTAB).any? { |line| line.include?(MOUNT_DIR) }
-  end
-
-  def cleanup
-    rmdir MOUNT_DIR if File.exist?(MOUNT_DIR)
-  end
-
-  def ensure_mounted
-    abort 'filesystem is not mounted.' unless mounted?
-  end
-
-  def ensure_not_mounted
-    abort 'filesystem is already mounted.' if mounted?
-  end
-
   desc 'Mount encrypted directory.'
   task :mount do
     ensure_not_mounted
@@ -57,13 +56,14 @@ namespace :encfs do
 
     mkdir MOUNT_DIR unless File.exist?(MOUNT_DIR)
 
-    command = []
-    command << 'encfs'
-    command << ENCRYPTED_DIR
-    command << MOUNT_DIR
-    command << "--extpass=#{extpass_string}"
-    command << "--idle=#{timeout}"
-    command << '--ondemand'
+    command = [].tap do |cmd|
+      cmd << 'encfs'
+      cmd << ENCRYPTED_DIR
+      cmd << MOUNT_DIR
+      cmd << "--extpass=#{extpass_string}"
+      cmd << "--idle=#{timeout}"
+      cmd << '--ondemand'
+    end
 
     sh(*command) do |ok, _|
       mount_failed unless ok

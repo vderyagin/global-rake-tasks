@@ -1,4 +1,4 @@
-DROPBOX_PUBLIC_DIR = File.expand_path '~/misc/Dropbox/Public'
+DROPBOX_PUBLIC_DIR = File.expand_path '~/Dropbox/Public'
 SHOTS_DIR = File.expand_path 'screenshots', DROPBOX_PUBLIC_DIR
 
 def screenshot_name

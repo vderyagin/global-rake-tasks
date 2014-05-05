@@ -1,16 +1,8 @@
 namespace :update do
   def update_git_repo(path)
-    git_dir = File.expand_path(File.join(path, '.git'))
-    work_tree = File.expand_path(path)
-
-    command = []
-
-    command << 'git'
-    command << "--git-dir=#{git_dir}"
-    command << "--work-tree=#{work_tree}"
-    command << 'pull'
-
-    sh(*command)
+    cd File.expand_path(path) do
+      sh 'git', 'pull'
+    end
   end
 
   desc 'Update rbenv installation'
