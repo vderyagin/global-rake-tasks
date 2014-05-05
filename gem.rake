@@ -50,7 +50,7 @@ namespace :gem do
     %w(
       awesome_print
       bundler
-      chef-solo
+      chef
       devel-which
       interactive_editor
       nrename
