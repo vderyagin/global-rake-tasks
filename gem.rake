@@ -66,4 +66,8 @@ namespace :gem do
       sh 'gem', *args, *gems
     end
   end
+
+  task default: [:install_default, :update_default] do
+    sh 'gem', 'cleanup'
+  end
 end
