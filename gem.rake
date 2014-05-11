@@ -39,6 +39,11 @@ def default_gems
 end
 
 namespace :gem do
+  desc 'Update rubygems'
+  task :update_rubygems do
+    sh 'gem', 'update', '--system'
+  end
+
   desc 'Install some universally needed gems.'
   task :install_default do
     gems_to_install = default_gems - installed_gems
@@ -66,8 +71,10 @@ namespace :gem do
       sh 'gem', *args, *gems
     end
   end
+end
 
-  task default: [:install_default, :update_default] do
-    sh 'gem', 'cleanup'
-  end
+task gem: ['gem:update_rubygems',
+           'gem:install_default',
+           'gem:update_default'] do
+  sh 'gem', 'cleanup'
 end
