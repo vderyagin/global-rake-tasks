@@ -19,22 +19,17 @@ end
 
 def default_gems
   %w(
-    awesome_print
     bundler
-    chef
     devel-which
     interactive_editor
     nrename
     pry
-    pry-plus
     rake
     rcodetools
     rubocop
     t
-    thor
     travis
     travis-lint
-    twitter
   )
 end
 
