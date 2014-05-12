@@ -17,7 +17,7 @@ task :gists do
     repo_name = gist['files'].first.first
     repo_path = File.expand_path(repo_name, '~/code/gists')
     unless File.directory?(repo_path)
-      sh 'git', 'clone', gist['git_pull_uri'], repo_path
+      sh 'git', 'clone', gist['git_pull_url'], repo_path
     end
   end
 end
