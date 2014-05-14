@@ -11,9 +11,6 @@ rake emacs:regenerate_autoloads      # Regenerate all el-get autoloads
 rake encfs:mount                     # Mount encrypted directory
 rake encfs:status                    # Tell whether encrypted filesystem is mounted
 rake encfs:umount                    # Unmount encrypted directory
-rake gem:install_default             # Install some universally needed gems
-rake gem:uninstall_all               # Uninstall all gems
-rake gem:update_default              # Update gems installed by default
 rake gists                           # clone my public gists
 rake lock_screen                     # Lock current display using alock(1)
 rake privoxy:disable                 # Disable privoxy
