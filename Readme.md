@@ -17,8 +17,6 @@ rake privoxy:disable                 # Disable privoxy
 rake privoxy:enable                  # Enable privoxy
 rake share_screenshot                # Take screenshot, share it on dropbox.com and put url in clipboard
 rake sqlite_vacuum                   # VACUUM all the sqlite database files used by firefox and thunderbird
-rake update:rbenv                    # Update rbenv installation
-rake update:ruby_build               # Update ruby-build plugin of rbenv
 rake wp:active                       # Set last used wallpaper on current display using feh(1)
 rake wp:random                       # Set random wallpater on current display using feh(1)
 rake wp:rename                       # Randomly rename all wallpapers
