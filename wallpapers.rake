@@ -5,15 +5,21 @@ UUID_REGEX = /\A\h{8}(-\h{4}){3}-\h{12}\z/
 
 def wallpapers_directory
   File.expand_path(ENV['WALLPAPERS_DIR']).tap do |dir|
-    abort "directory '#{dir}' does_not exist" unless File.directory?(dir)
+    warn "directory '#{dir}' does not exist" unless File.directory?(dir)
   end
 end
 
 # Return random wallpaper from wallpapers_directory.
 def random_wallpaper
+  wallpapers = Dir[File.join(wallpapers_directory, '*')]
+
+  # Avoid infinite loop:
+  return                  if wallpapers.empty?
+  return wallpapers.first if wallpapers.one?
+
   loop do
-    Dir[File.join wallpapers_directory, '*'].sample.tap do |random_wp|
-      return random_wp if active_wallpaper != random_wp
+    wallpapers.sample.tap do |random_wp|
+      return random_wp unless active_wallpaper == random_wp
     end
   end
 end
@@ -31,14 +37,25 @@ def active_wallpaper
     end
 end
 
+def lock_screen(wallpaper)
+  IO.popen([].tap do |cmd|
+             cmd << 'alock'
+             cmd << '-auth' << 'pam'
+             cmd << '-bg' << (wallpaper ? "image:file=#{wallpaper}" : 'blank')
+           end)
+end
+
 desc 'Lock current display using alock(1).'
 task :lock_screen do
-  (active_wallpaper || random_wallpaper).tap do |wp|
-    IO.popen ['alock', '-auth', 'pam', '-bg', "image:file=#{wp}"]
-  end
+  lock_screen(active_wallpaper || random_wallpaper)
 end
 
 def use_wallpaper(wallpaper)
+  unless wallpaper
+    warn 'no wallpaper to use'
+    return
+  end
+
   IO.popen ['feh', '--bg-fill', wallpaper]
 end
 
