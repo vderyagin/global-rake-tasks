@@ -1,17 +1,10 @@
 def cruft
   %w(
-    .adobe
-    .darcs
     .emacs.d/image-dired
     .emacs.d/url
-    .fontconfig
     .local/share/Trash
-    .macromeda
-    .rbx
     .serverauth.*
     .thumbnails
-    .url
-    tmp
     .local/share/recently-used.xbel
   ).map { |file| File.expand_path(file, '~') }
 end
