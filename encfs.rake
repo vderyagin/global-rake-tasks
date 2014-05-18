@@ -1,7 +1,7 @@
 =begin
 
 Set of rake tasks for mounting/unmounting and querying status of certain encfs
-(http://www.arg0.net/encfs) filesystem (specified by ENCRYPTED_DIR and
+(http://www.arg0.net/encfs) filesystem (specified by ENCRYPTED_STORAGE and
 MOUNT_DIR constants).
 
 Relies on presence of encfs(1), fusermount(1) and notify-send(1) command-line
@@ -9,7 +9,7 @@ tools.
 
 =end
 
-ENCRYPTED_DIR = File.expand_path '~/misc/crypt'
+ENCRYPTED_STORAGE = File.expand_path '~/misc/crypt'
 MOUNT_DIR = File.expand_path '~/temp/encrypted'
 MTAB = '/etc/mtab'
 FAIL_ICON = File.expand_path '~/.icons/fail.png'
@@ -49,16 +49,16 @@ namespace :encfs do
   task :mount do
     ensure_not_mounted
 
+    mkdir_p [ENCRYPTED_STORAGE, MOUNT_DIR]
+
     extpass_string =
-      "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_DIR}:'"
+      "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_STORAGE}:'"
 
     timeout = 60                          # minutes
 
-    mkdir MOUNT_DIR unless File.exist?(MOUNT_DIR)
-
     command = [].tap do |cmd|
       cmd << 'encfs'
-      cmd << ENCRYPTED_DIR
+      cmd << ENCRYPTED_STORAGE
       cmd << MOUNT_DIR
       cmd << "--extpass=#{extpass_string}"
       cmd << "--idle=#{timeout}"
