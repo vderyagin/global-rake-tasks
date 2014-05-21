@@ -60,6 +60,22 @@ namespace :emacs do
     system(*command)            # Kernel#system is less noisy then FileUtils#sh
   end
 
+  desc 'Recompile yasnippets'
+  task :recompile_yasnippets do
+    init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
+    yas_file = File.expand_path '~/.emacs.d/dotemacs/conf/yasnippet-configuration.el'
+
+    command = []
+    command << 'emacs'
+    command << '--quick'
+    command << '--load' << init_file
+    command << '--load' << yas_file
+    command << '--batch'
+    command << '--funcall' << 'yas-recompile-all'
+
+    sh(*command)
+  end
+
   desc 'Regenerate all el-get autoloads.'
   task :regenerate_autoloads do
     init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'

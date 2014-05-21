@@ -7,6 +7,7 @@ rake emacs:find_cruft                # locate stale and orphaned bytecode im  ~/
 rake emacs:find_orphan_bytecode      # Find elisp bytecode files lacking source in ~/.emacs.d directory
 rake emacs:find_stale_bytecode       # Find stale elisp bytecode in ~/.emacs.d directory
 rake emacs:recompile_configs         # Recompile all emacs configuration files
+rake emacs:recompile_yasnippets      # Recompile yasnippets
 rake emacs:regenerate_autoloads      # Regenerate all el-get autoloads
 rake encfs:mount                     # Mount encrypted directory
 rake encfs:status                    # Tell whether encrypted filesystem is mounted
