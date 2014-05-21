@@ -39,8 +39,6 @@ namespace :emacs do
 
   desc 'Recompile all emacs configuration files.'
   task :recompile_configs do
-    require 'open3'
-
     init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
     srcs = Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.el']
 
@@ -64,8 +62,6 @@ namespace :emacs do
 
   desc 'Regenerate all el-get autoloads.'
   task :regenerate_autoloads do
-    require 'open3'
-
     init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
 
     command = []
