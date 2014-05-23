@@ -106,7 +106,10 @@ namespace :emacs do
   end
 
   desc 'update stuff managed by el-get'
-  task el_get: %i(el_get:upgrade_self el_get:upgrade_packages el_get:regenerate_autoloads)
+  task el_get: %i(el_get:upgrade_self
+                  el_get:upgrade_packages
+                  el_get:regenerate_autoloads
+                  recompile_configs)
 
   namespace :el_get do
     desc 'Upgrade el-get'
