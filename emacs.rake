@@ -3,6 +3,10 @@ def stale_bytecode?(source_file)
   bytecode.exist? && bytecode.mtime < source_file.mtime
 end
 
+def init_file
+  File.expand_path('~/.emacs.d/dotemacs/misc/compile-init.el')
+end
+
 namespace :emacs do
   desc 'locate stale and orphaned bytecode im  ~/.emacs.d directory.'
   task find_cruft: %i(find_stale_bytecode find_orphan_bytecode)
@@ -14,8 +18,8 @@ namespace :emacs do
     wildcard = File.expand_path('~/.emacs.d/**/*.el')
 
     stale = Pathname.glob(wildcard)
-      .select(&method(:stale_bytecode?))
-      .map { |el| "#{el}c" }
+            .select(&method(:stale_bytecode?))
+            .map { |el| "#{el}c" }
 
     puts stale
 
@@ -39,18 +43,18 @@ namespace :emacs do
 
   desc 'Recompile all emacs configuration files.'
   task :recompile_configs do
-    init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
     srcs = Dir[File.expand_path '~/.emacs.d/dotemacs/conf/**/*.el']
 
-    command = []
-    command << 'emacs'
-    command << '--quick'
-    command << '--load' << init_file
-    command << '--batch'
-    command << '--funcall' << 'batch-byte-compile'
+    command = [].tap do |cmd|
+      cmd << 'emacs'
+      cmd << '--quick'
+      cmd << '--load' << init_file
+      cmd << '--batch'
+      cmd << '--funcall' << 'batch-byte-compile'
 
-    srcs.each do |src|
-      command << src
+      srcs.each do |src|
+        cmd << src
+      end
     end
 
     wildcard = File.expand_path('~/.emacs.d/dotemacs/conf/**/*.elc')
@@ -62,32 +66,16 @@ namespace :emacs do
 
   desc 'Recompile yasnippets'
   task :recompile_yasnippets do
-    init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
     yas_file = File.expand_path '~/.emacs.d/dotemacs/conf/yasnippet-configuration.el'
 
-    command = []
-    command << 'emacs'
-    command << '--quick'
-    command << '--load' << init_file
-    command << '--load' << yas_file
-    command << '--batch'
-    command << '--funcall' << 'yas-recompile-all'
-
-    sh(*command)
-  end
-
-  desc 'Regenerate all el-get autoloads.'
-  task :regenerate_autoloads do
-    init_file = File.expand_path '~/.emacs.d/dotemacs/misc/compile-init.el'
-
-    command = []
-    command << 'emacs'
-    command << '--quick'
-    command << '--load' << init_file
-    command << '--batch'
-    command << '--funcall' << 'el-get-regenerate-all-autoloads'
-
-    sh(*command)
+    sh(*[].tap do |cmd|
+          cmd << 'emacs'
+          cmd << '--quick'
+          cmd << '--load' << init_file
+          cmd << '--load' << yas_file
+          cmd << '--batch'
+          cmd << '--funcall' << 'yas-recompile-all'
+        end)
   end
 
   desc 'Delete all session persistance files.'
@@ -114,6 +102,44 @@ namespace :emacs do
       puts 'no files to delete.'
     else
       session.each(&method(:rm_r))
+    end
+  end
+
+  desc 'update stuff managed by el-get'
+  task el_get: %i(el_get:upgrade_self el_get:upgrade_packages el_get:regenerate_autoloads)
+
+  namespace :el_get do
+    desc 'Upgrade el-get'
+    task :upgrade_self do
+      sh(*[].tap do |cmd|
+            cmd << 'emacs'
+            cmd << '--quick'
+            cmd << '--load' << init_file
+            cmd << '--batch'
+            cmd << '--funcall' << 'el-get-self-update'
+          end)
+    end
+
+    desc 'Upgrade all el-get packages'
+    task :upgrade_packages do
+      sh(*[].tap do |cmd|
+            cmd << 'emacs'
+            cmd << '--quick'
+            cmd << '--load' << init_file
+            cmd << '--batch'
+            cmd << '--eval' << '(let ((el-get-default-process-sync t)) (el-get-update-all \'no-prompt))'
+          end)
+    end
+
+    desc 'Regenerate all el-get autoloads.'
+    task :regenerate_autoloads do
+      sh(*[].tap do |cmd|
+            cmd << 'emacs'
+            cmd << '--quick'
+            cmd << '--load' << init_file
+            cmd << '--batch'
+            cmd << '--funcall' << 'el-get-regenerate-all-autoloads'
+          end)
     end
   end
 end
