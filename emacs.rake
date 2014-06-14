@@ -130,7 +130,7 @@ namespace :emacs do
             cmd << '--quick'
             cmd << '--load' << init_file
             cmd << '--batch'
-            cmd << '--eval' << '(let ((el-get-default-process-sync t)) (el-get-update-all \'no-prompt))'
+            cmd << '--funcall' << 'el-get-update-most'
           end)
     end
 
