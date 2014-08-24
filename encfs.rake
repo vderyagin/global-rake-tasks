@@ -94,6 +94,22 @@ namespace :encfs do
       puts " is \e[1m\e[31mNOT MOUNTED\e[0m"
     end
   end
+
+  desc 'Create encfs filesystem unless already exists.'
+  task :new do
+    abort 'already exists and mounted' if mounted?
+
+    if File.exist?(ENCRYPTED_STORAGE) &&
+       Dir.entries(ENCRYPTED_STORAGE).length > 2
+      abort "'#{ENCRYPTED_STORAGE}' is not empty."
+    end
+
+    [ENCRYPTED_STORAGE, MOUNT_DIR].each(&FileUtils.method(:mkdir_p))
+
+    sh 'encfs', '--standard', ENCRYPTED_STORAGE, MOUNT_DIR do |ok, _|
+      abort 'failed to create filesystem' unless ok
+    end
+  end
 end
 
 task encfs: 'encfs:mount'
