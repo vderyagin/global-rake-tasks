@@ -85,6 +85,12 @@ namespace :wp do
   task :active do
     use_wallpaper(active_wallpaper || random_wallpaper)
   end
+
+  desc 'Set random wallpaper if last wallpaler change was more then a day ago.'
+  task :update_if_stale do
+    one_day_ago = Time.now - 60 * 60 * 24
+    use_wallpaper random_wallpaper if File.mtime(FEH_BG) < one_day_ago
+  end
 end
 
 task wp: 'wp:random'
