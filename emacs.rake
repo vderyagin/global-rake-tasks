@@ -108,6 +108,7 @@ namespace :emacs do
   desc 'update stuff managed by el-get'
   task el_get: %i(el_get:upgrade_self
                   el_get:upgrade_packages
+                  el_get:git_gc
                   el_get:regenerate_autoloads
                   recompile_configs)
 
@@ -132,6 +133,17 @@ namespace :emacs do
             cmd << '--batch'
             cmd << '--funcall' << 'el-get-update-most'
           end)
+    end
+
+    desc 'GC all git repos in el-get directory'
+    task :git_gc do
+      Dir[File.expand_path('~/.emacs.d/el-get/*/.git')]
+        .map(&File.method(:dirname))
+        .each do |r|
+        Dir.chdir r do
+          system 'git', 'gc'
+        end
+      end
     end
 
     desc 'Regenerate all el-get autoloads.'
