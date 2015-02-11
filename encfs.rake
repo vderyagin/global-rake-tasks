@@ -36,32 +36,19 @@ def cleanup
   rmdir MOUNT_DIR if File.exist?(MOUNT_DIR)
 end
 
-def ensure_mounted
-  abort 'filesystem is not mounted.' unless mounted?
-end
-
-def ensure_not_mounted
-  abort 'filesystem is already mounted.' if mounted?
-end
-
 namespace :encfs do
   desc 'Mount encrypted directory.'
   task :mount do
-    ensure_not_mounted
+    abort 'already mounted' if mounted?
 
-    mkdir_p [ENCRYPTED_STORAGE, MOUNT_DIR]
-
-    extpass_string =
-      "ssh-askpass-fullscreen 'Enter password for #{ENCRYPTED_STORAGE}:'"
-
-    timeout = 60                          # minutes
+    mkdir_p MOUNT_DIR
 
     command = [].tap do |cmd|
       cmd << 'encfs'
       cmd << ENCRYPTED_STORAGE
       cmd << MOUNT_DIR
-      cmd << "--extpass=#{extpass_string}"
-      cmd << "--idle=#{timeout}"
+      cmd << '--extpass="ssh-askpass-fullscreen encfs"'
+      cmd << '--idle=60'                  # in minutes
       cmd << '--ondemand'
     end
 
@@ -74,7 +61,7 @@ namespace :encfs do
 
   desc 'Unmount encrypted directory.'
   task :umount do
-    ensure_mounted
+    abort 'not mounted' unless mounted?
 
     sh 'fusermount', '-uz', MOUNT_DIR do |ok, _|
       abort 'failed to unmount' unless ok
@@ -104,9 +91,7 @@ namespace :encfs do
       abort "'#{ENCRYPTED_STORAGE}' is not empty."
     end
 
-    [ENCRYPTED_STORAGE, MOUNT_DIR].each(&FileUtils.method(:mkdir_p))
-
-    sh 'encfs', '--standard', ENCRYPTED_STORAGE, MOUNT_DIR do |ok, _|
+    sh 'encfs', '--paranoia', ENCRYPTED_STORAGE, MOUNT_DIR do |ok, _|
       abort 'failed to create filesystem' unless ok
     end
   end
