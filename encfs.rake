@@ -116,8 +116,25 @@ namespace :encfs do
 
   desc 'Report status of each encfs filesystem'
   task :status do
-    FILESYSTEMS.keys.each do |key|
-      puts status(key)
+    FILESYSTEMS.keys.each do |fs|
+      puts status(fs)
+    end
+  end
+
+  desc 'Unmount all mounted encfs filesystem'
+  task :umount do
+    FILESYSTEMS.keys.select(&method(:mounted?)).each do |fs|
+      abort 'not mounted' unless mounted?(fs)
+
+      sh 'fusermount', '-uz', mount_dir(fs) do |ok, _|
+        abort 'failed to unmount' unless ok
+      end
+
+      cleanup(fs)
+    end
+
+    FILESYSTEMS.keys.each do |fs|
+      Rake::Task["encfs:#{fs}:status"].invoke
     end
   end
 end
