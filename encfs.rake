@@ -8,14 +8,19 @@ tools.
 
 =end
 
+require 'socket'
+
 require_relative './lib/encfs/fs'
 
 FAIL_ICON = File.expand_path '~/.icons/fail.png'
 
-FILESYSTEMS = {
-  ledger: '~',
-  stuff:  '~/temp',
-}
+FILESYSTEMS = {stuff: '~/temp'}.tap do |fss|
+  case Socket.gethostname
+  when 'thinkpad'
+    fss.merge!(articles: '~/code/misc/blog/source',
+               ledger:   '~')
+  end
+end
 
 def filesystem(id)
   mount_dir = File.expand_path("#{id}.encfs", FILESYSTEMS[id])
