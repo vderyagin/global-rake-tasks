@@ -45,7 +45,7 @@ module EncFS
     end
 
     def create
-      return true if mounted
+      return true if mounted?
 
       if File.exist?(@store) && Dir.entries(@store).length > 2
         warn "#{@store} exists and is not empty"

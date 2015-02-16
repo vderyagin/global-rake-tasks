@@ -58,7 +58,7 @@ namespace :encfs do
       end
 
       desc "Create \"#{key}\" encfs filesystem unless already exists"
-      desc :new do
+      task :new do
         fs.create or warn "failed to create filesystem \"#{key}\""
       end
     end
